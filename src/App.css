@@ -1,3 +1,8 @@
+body , html{
+  overscroll-behavior: none;
+  -webkit-overscroll-behavior: none; /* prefijo del vendedor para navegadores WebKit */
+}
+
 
 .timerPlayer{
   width: 200px;
@@ -49,8 +54,8 @@ select{
 .timerListPlayer{
   display: grid;
   list-style: none;
-  grid-template-columns: repeat(auto-fill, minmax(200px,1fr));
-  gap: 0.8rem;
+  height: auto;
+  grid-template-columns: repeat(auto-fill, minmax(250px,1fr));
   width: 100%;
   margin: 0;
   padding: 0;
@@ -67,6 +72,8 @@ select{
   justify-content: center;
   width: 100%;
   border-radius: 10px;
+
+  
 }
 .game{
   display: flex;
@@ -83,6 +90,7 @@ select{
   align-items: center;
   margin-top: 10px;
   margin-bottom: 10px;
+  gap: 10px;
 }
 .containerPlayers{
   display: flex;
@@ -95,6 +103,7 @@ input#name{
 .player{
   display: flex;
   flex-direction: column;
+  padding: 0.3rem;
 }
 .player span, p{
   text-align: center;
@@ -106,6 +115,7 @@ input#name{
   justify-content: space-between;
   height: 95%;
   align-items: center;
+  overscroll-behavior: none;
 }
 
 @media only screen and (max-width: 767px){
