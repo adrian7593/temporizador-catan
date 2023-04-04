@@ -2,15 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Players } from "./Players";
 import { useSecondsToString } from "../hooks/useSecondToMinute";
 import { styleButtonsTimer } from "../constants/styleButtonsTimer";
+import { play } from "../constants/sounds";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay , faPause, faClockRotateLeft, faBackwardStep,faLockOpen,faLock} from "@fortawesome/free-solid-svg-icons";     
-import soundFinishTime11 from "../assets/soundFinishTime1.wav"
-import soundFinishTime12 from "../assets/soundFinishTime2.wav"
-import soundFinishTimeGame1 from "../assets/soundFinishTimeGame1.wav"
-import soundFinishTimeGame2 from "../assets/soundFinishTimeGame2.wav"
-import soundPassTurn2 from "../assets/soundPassTurn2.wav"
-import soundGeneralClick from "../assets/soundGeneralClick.wav"
+import { styleTimerTurn, styleTimerBank } from "../constants/styleTimer";
 
 const Timer = ({ initialTime, players, isStartGame }) => {
     const [timeGame, setTimeGame] = useState(initialTime);
@@ -52,15 +48,21 @@ const Timer = ({ initialTime, players, isStartGame }) => {
             if (timeGame > 0) {
                 setTimeGame((prev) => prev - 1);
                 setTimeGameToMinute(useSecondsToString(timeGame - 1));
-                if (timeGame === 1 && bankActualPlayer != 0) 
-                  play(soundFinishTimeGame2);
+                console.log(bankActualPlayer != 0);
+                if (timeGame === 1 && bankActualPlayer != 0)
+                  play("soundFinishTimeGame2");
+                  
+                if (bankActualPlayer <= 0 && (timeGame - 1 ) <= 0) {
+                play("soundFinishTime12");
+                hanldeClickNextTurn();
+                }
             } else {
                 setBankActualPlayer((prev) => prev - 1);
-                setTimeBankToMinute(useSecondsToString(bankActualPlayer));
-            }
-            if (bankActualPlayer <= 0 && timeGame <= 0) {
-              play(soundFinishTime12);
-              hanldeClickNextTurn();
+                setTimeBankToMinute(useSecondsToString(bankActualPlayer - 1));
+                if ((bankActualPlayer) <= 0 && timeGame <= 0) {
+                  play("soundFinishTime12");
+                  hanldeClickNextTurn();
+                }
             }
         }, 1000);
 
@@ -78,11 +80,11 @@ const Timer = ({ initialTime, players, isStartGame }) => {
 
     const handleClickStart = () => {
         setIsRun(!isRun);
-        play(soundGeneralClick);
+        play("soundGeneralClick");
     };
 
     const handleClickComebackTurn = () => {
-        play(soundGeneralClick);
+        play("soundGeneralClick");
         setIsRun(true);
         setIsButtonsDisable(true);
         if (idPlayer === passedTurnIdPlayer) {
@@ -98,12 +100,12 @@ const Timer = ({ initialTime, players, isStartGame }) => {
     };
 
     const handleClickButtonsDisable = () => {
-        play(soundGeneralClick);
+        play("soundGeneralClick");
         setIsButtonsDisable(!isButtonsDisable);
     };
 
     const hanldeClickReset = () => {
-        play(soundGeneralClick);
+        play("soundGeneralClick");
         let id = idPlayer;
         setIsButtonsDisable(true);
         setVariablesTimeGameToInicial();
@@ -141,7 +143,7 @@ const Timer = ({ initialTime, players, isStartGame }) => {
 
         let id = idPlayer;
         if (!(bankActualPlayer <= 0 && timeGame <= 0))
-          play(soundPassTurn2);
+          play("soundPassTurn2");
 
         if (!isFirstTurn) {
             if (idP.current === idPlayer) {
@@ -197,10 +199,6 @@ const Timer = ({ initialTime, players, isStartGame }) => {
         setTimeGameToMinute(useSecondsToString(initialTime));
     };
 
-    const play = (sound) => {
-      new Audio(sound).play();
-    };
-
     return (
         <div className="containerStartGame">
             <motion.button
@@ -216,40 +214,12 @@ const Timer = ({ initialTime, players, isStartGame }) => {
                     }}
                 >
                     <span
-                        style={
-                            timeGame > 0
-                                ? {
-                                      fontSize: "7rem",
-                                      fontFamily: "'Inconsolata', monospace",
-                                      fontWeight: 900,
-                                      transition: "font-size 0.15s ease-in-out",
-                                  }
-                                : {
-                                      fontSize: "4rem",
-                                      fontFamily: "'Inconsolata', monospace",
-                                      fontWeight: 900,
-                                      transition: "font-size 1s ease-in-out",
-                                  }
-                        }
+                        style={styleTimerTurn(initialTime, timeGame, bankActualPlayer)}
                     >
                         {timeGameToMinute}
                     </span>
                     <span
-                        style={
-                            timeGame > 0
-                                ? {
-                                      fontSize: "4rem",
-                                      fontFamily: "'Inconsolata', monospace",
-                                      fontWeight: 900,
-                                      transition: "font-size 0.15s ease-in-out",
-                                  }
-                                : {
-                                      fontSize: "7rem",
-                                      fontFamily: "'Inconsolata', monospace",
-                                      fontWeight: 900,
-                                      transition: "font-size 1s ease-in-out",
-                                  }
-                        }
+                        style={styleTimerBank(initialTime, timeGame, bankActualPlayer)}
                     >
                         {timeBankToMinute}
                     </span>
