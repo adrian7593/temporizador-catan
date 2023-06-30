@@ -17,7 +17,7 @@ const PlayersList = ({
 }) => {
   const [renderPlayerToDelete, setRenderPlayerToDelete] = useState(true);
   const { setColorsDeletes } = useContext(Context);
-
+  console.log(players);
   const handleDragEnd = (result) => {
     if (!result.destination) return;
     const newItems = [...players];
@@ -52,14 +52,7 @@ const PlayersList = ({
           <ul
             {...droppableProvided.droppableProps}
             ref={droppableProvided.innerRef}
-            className="timerListPlayer"
-            style={
-              players.length > 4 && isStartGame
-                ? {
-                    gridTemplateColumns: "repeat(auto-fill, minmax(150px,1fr))",
-                  }
-                : null
-            }
+            className={players.length > 4 && isStartGame ? 'timerListPlayerMax5' : 'timerListPlayer'}
           >
             {players?.map((player
             , index) => (
