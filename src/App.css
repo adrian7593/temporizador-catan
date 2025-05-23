@@ -22,6 +22,7 @@ select{
 .containerMinutesGame{
   display: flex;
   align-items: center;
+  justify-content: space-between;
 }
 .containerAddPlayer{
   display: flex;
@@ -171,4 +172,102 @@ input#name{
     width: 100%;
     max-width: 794px;
   }
+}
+
+.checkbox-wrapper-23 *,
+  .checkbox-wrapper-23 *:after,
+  .checkbox-wrapper-23 *:before {
+  box-sizing: border-box;
+}
+
+.checkbox-wrapper-23 input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox-wrapper-23 input:checked + label svg path {
+  stroke-dashoffset: 0;
+}
+.checkbox-wrapper-23{
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.checkbox-wrapper-23 input:focus + label {
+  transform: scale(1.03);
+}
+
+.checkbox-wrapper-23 input + label {
+  display: block;
+  border: 2px solid rgb(253, 237, 237);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+
+.checkbox-wrapper-23 input + label:active {
+  transform: scale(1.05);
+  border-radius: 12px;
+}
+
+.checkbox-wrapper-23 input + label svg {
+  pointer-events: none;
+  padding: 5%;
+}
+
+.checkbox-wrapper-23 input + label svg path {
+  fill: none;
+  stroke: rgb(247, 247, 247);
+  stroke-width: 4px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 101;
+  transition: all 250ms cubic-bezier(1,0,.37,.91);
+}
+.github{
+  width: 35px;
+
+}
+.title{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+body {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none;
+}
+.helper{
+  background-color: rgb(97, 97, 97);
+  width: 150px;
+  height: auto;
+  position: absolute;
+  padding: 0.2rem;
+  font-size: 0.95rem;
+  border-radius: 0.5rem;
+  top: 10px;
+  left: 27px;
+}
+
+
+@keyframes open {
+  from {
+    transform: scale(0,0);
+  }
+  to {
+    transform: scale(1,1);
+  }
+}
+.animate-open {
+  animation: open 0.15s ease-in-out;
+  z-index: 100;
+  transform-origin: top left;
 }

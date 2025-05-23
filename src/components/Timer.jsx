@@ -13,9 +13,7 @@ import {
   faBackwardStep,
   faLockOpen,
   faLock,
-  faCircleExclamation,
   faHouseChimneyWindow,
-  faHouse,
   faMaximize,
   faMinimize
 } from "@fortawesome/free-solid-svg-icons";
@@ -27,19 +25,19 @@ import {
 } from "../constants/styleTimer";
 
 
-const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
+
+
+
+const Timer = ({ initialTime, players, isStartGame, setIsStartGame, isFirstTurn, setIsFirstTurn }) => {
   const [timeGame, setTimeGame] = useState(initialTime);
   const [timeGameToMinute, setTimeGameToMinute] = useState(
     useSecondsToString(timeGame)
   );
+  console.log(isFirstTurn);
   const ref = useRef(null);
-  const [show, toggle] = useToggle(false);
-  const isFullscreen = useFullscreen(ref, show, {
-    onClose: () => toggle(false),
-  });
+  const [show, setToggle] = useState(false);
   const [player, setPlayer] = useState(players);
   const [isRun, setIsRun] = useState(false);
-  const [isFirstTurn, setIsFirstTurn] = useState(true);
   const [isComeback, setIsComeback] = useState(false);
   const [totalTimeGame, setTotalTimeGame] = useState(0);
   const [totalTimeGameToMinute, setTotalTimeGameToMinute] = useState(
@@ -50,10 +48,11 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
   const [turnNumber, setTurnNumber] = useState(1);
   const [bankActualPlayer, setBankActualPlayer] = useState(
     player[idPlayer]?.timerBank
-  );
+  )
   const [timeBankToMinute, setTimeBankToMinute] = useState(
     useSecondsToString(bankActualPlayer)
-  );
+  )
+
 
   const [passedTurnTime, setPassedTurnTime] = useState(initialTime);
   const [passedTurnIdPlayer, setPassedTurnIdPlayer] = useState(idPlayer);
@@ -66,13 +65,24 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
     setTimeBankToMinute(useSecondsToString(player[idPlayer]?.timerBank));
   }, [idPlayer, player]);
 
+  function toggleFullScreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen()
+      setToggle(!show)
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      setToggle(!show)
+    }
+  }
+  
+
   useEffect(() => {
     let interval = null;
 
+
     interval = setInterval(() => {
-      if (!isRun) {
-        return;
-      }
+      if (!isRun) return
+
       if (timeGame > 0) {
         setTimeGame((prev) => prev - 1);
         setTimeGameToMinute(useSecondsToString(timeGame - 1));
@@ -95,7 +105,9 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
       setTotalTimeGameToMinute(useSecondsToString(totalTimeGame + 1));
     }, 1000);
 
-    return () => clearInterval(interval);
+    return () =>{ 
+      clearInterval(interval)
+    }
   }, [
     timeGame,
     isRun,
@@ -233,7 +245,7 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
   };
 
   return (
-    <div className="containerStartGame" ref={ref} style={{backgroundColor:'#000000'}}>
+    <div className="containerStartGame" ref={ref} style={{backgroundColor:'#000000'}} id="outer-container">
       
       <motion.button
         whileTap={{ scale: 0.99 }}
@@ -332,7 +344,7 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
         >
           Set
         </button>
-        <button onClick={() => toggle()}>{!isFullscreen ? <FontAwesomeIcon style={styleButtonsTimer()} icon={faMaximize} /> : <FontAwesomeIcon icon={faMinimize} style={styleButtonsTimer()}/> }</button>
+        <button >{!show ? <FontAwesomeIcon onClick={toggleFullScreen} style={styleButtonsTimer()} icon={faMaximize} /> : <FontAwesomeIcon onClick={toggleFullScreen} icon={faMinimize} style={styleButtonsTimer()}/> }</button>
         <button onClick={handleClickButtonsDisable} style={styleButtonsTimer()}>
           {isButtonsDisable ? (
             <FontAwesomeIcon icon={faLock} style={{ color: "#f5f5f5" }} />
@@ -340,6 +352,8 @@ const Timer = ({ initialTime, players, isStartGame, setIsStartGame }) => {
             <FontAwesomeIcon icon={faLockOpen} style={{ color: "#f5f5f5" }} />
           )}
         </button>
+      
+        
       </div>
     </div>
   );
